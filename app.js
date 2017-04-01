@@ -5,15 +5,15 @@ const multer = require('multer');
 const fs = require('fs')
 const app = express();
 const schema = mongoose.Schema;
-const upload = multer({ storage: storage })
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'file/')
+        cb(null, '/home/harddisk/harddisk')
     },
     filename: function (req, file, cb) {
         cb(null, file.originalname)
     }
 })
+const upload = multer({ storage: storage})
 
 app.use(bodyParser.urlencoded({
     extended : true
@@ -30,7 +30,14 @@ app.get('/', function (req, res) {
         res.send(data)
     })
 })
-app.post('/', upload.single('file'), function(req,res){
+
+app.get('/movieupload', function (req, res) {
+    fs.readFile('movie.html', 'utf-8', function (err, data) {
+        res.send(data)
+    })
+})
+
+app.post('/movieupload', upload.single('file'), function(req,res){
     console.log(req.file);
     res.send('Success')
 });
